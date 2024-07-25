@@ -37,9 +37,9 @@ namespace Algorithms.Algorithm.Sorting
 			{
 				// Find the index of the minimum element in the remaining unsorted array
 				int minIndex = i;
-				for (int j = i + 1; j < n; j++)
+				for (var j = i + 1; j < n; j++)
 				{
-					if (arr[j] > arr[minIndex])
+					if (arr[j] < arr[minIndex])
 					{
 						minIndex = j;
 					}
