@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Algorithms.Interface
 {
-    internal interface IAlgorithm
+    public interface ISortAlgorithm
     {
         void Run();
+		int[] Sort(int[] arr);
+        string GetDescription();
     }
 }

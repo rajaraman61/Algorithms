@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Algorithms.Interface;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -23,24 +25,24 @@ namespace ConsoleApp
 			RunAlgorithm(choice, algorithms);
 		}
 
-		static Dictionary<string, IAlgorithm> DiscoverAlgorithms()
+		static Dictionary<string, ISortAlgorithm> DiscoverAlgorithms()
 		{
 			// Create a dictionary to store algorithms
-			var algorithms = new Dictionary<string, IAlgorithm>();
+			var algorithms = new Dictionary<string, ISortAlgorithm>();
 
 			// Get all types that implement IAlgorithm
 			var algorithmTypes = Assembly.GetExecutingAssembly()
 			.GetTypes()
-										 .Where(t => typeof(IAlgorithm).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+										 .Where(t => typeof(ISortAlgorithm).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
 										 .ToList();
 
 			// Instantiate and add each algorithm to the dictionary
 			for (int i = 0; i < algorithmTypes.Count; i++)
 			{
-				IAlgorithm algorithm = null;
+				ISortAlgorithm algorithm = null;
 				try
 				{
-					algorithm = (IAlgorithm)Activator.CreateInstance(algorithmTypes[i]);
+					algorithm = (ISortAlgorithm)Activator.CreateInstance(algorithmTypes[i]);
 				}
 				catch (Exception ex)
 				{
@@ -55,7 +57,7 @@ namespace ConsoleApp
 			return algorithms;
 		}
 
-		static void DisplayMenu(Dictionary<string, IAlgorithm> algorithms)
+		static void DisplayMenu(Dictionary<string, ISortAlgorithm> algorithms)
 		{
 			Console.WriteLine("Select an option:");
 			foreach (var key in algorithms.Keys)
@@ -71,11 +73,14 @@ namespace ConsoleApp
 			return string.IsNullOrEmpty(choice) ? string.Empty : choice;
 		}
 
-		static void RunAlgorithm(string choice, Dictionary<string, IAlgorithm> algorithms)
+		static void RunAlgorithm(string choice, Dictionary<string, ISortAlgorithm> algorithms)
 		{
-			if (algorithms.TryGetValue(choice, out IAlgorithm algorithm))
+			if (algorithms.TryGetValue(choice, out ISortAlgorithm algorithm))
 			{
+				var stopWatch = Stopwatch.StartNew();
 				algorithm.Run();
+				stopWatch.Stop();
+				Console.WriteLine($"Total execution time for {algorithm.GetDescription()}: {stopWatch.ElapsedMilliseconds} ms");
 			}
 			else
 			{
