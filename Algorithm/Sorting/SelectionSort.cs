@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Algorithms.Algorithm
+namespace Algorithms.Algorithm.Sorting
 {
-	internal class BubbleSort : ISortAlgorithm
+	internal class SelectionSort : ISortAlgorithm
 	{
 		public string GetDescription()
 		{
-			return "Bubble Sort";
+			return "Selection sort algorithm";
 		}
 
 		public void Run()
@@ -20,9 +20,10 @@ namespace Algorithms.Algorithm
 			// Get the integers from the user, including the number of inputs
 			int[] userInputs = InputUtils.GetIntInputs();
 			int[] sortedValues = Sort(userInputs);
+
 			Console.WriteLine("Sorted Value:");
 
-			foreach (int value in sortedValues)
+			foreach (var value in sortedValues)
 			{
 				Console.WriteLine(value);
 			}
@@ -32,21 +33,26 @@ namespace Algorithms.Algorithm
 		{
 			int n = arr.Length;
 
-			for (int i = 0; i < n - 1; i++)
+			for (int i = 0; i < n - 1; i++ )
 			{
-				for (int j = 0; j < n - i - 1; j++)
+				// Find the index of the minimum element in the remaining unsorted array
+				int minIndex = i;
+				for (int j = i + 1; j < n; j++)
 				{
-					if (arr[j] > arr[j + 1])
+					if (arr[j] > arr[minIndex])
 					{
-						MiscUtils.Swap(ref arr[j], ref arr[j + 1]);
+						minIndex = j;
 					}
 				}
+
+				// Swap the found minimum element with the first unsorted element
+				if (minIndex != i)
+				{
+					MiscUtils.Swap(ref arr[i], ref arr[minIndex]);
+				}
 			}
+
 			return arr;
 		}
-
-
-
-
 	}
 }

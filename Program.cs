@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -10,7 +11,8 @@ namespace ConsoleApp
 {
 	internal class Program
 	{
-		static void Main(string[] args)
+        [RequiresUnreferencedCode("Calls ConsoleApp.Program.DiscoverAlgorithms()")]
+        static void Main(string[] args)
 		{
 			// Discover and initialize algorithms
 			var algorithms = DiscoverAlgorithms();
@@ -25,6 +27,7 @@ namespace ConsoleApp
 			RunAlgorithm(choice, algorithms);
 		}
 
+		[RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetTypes()")]
 		static Dictionary<string, ISortAlgorithm> DiscoverAlgorithms()
 		{
 			// Create a dictionary to store algorithms
@@ -32,7 +35,7 @@ namespace ConsoleApp
 
 			// Get all types that implement IAlgorithm
 			var algorithmTypes = Assembly.GetExecutingAssembly()
-			.GetTypes()
+										 .GetTypes()
 										 .Where(t => typeof(ISortAlgorithm).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
 										 .ToList();
 

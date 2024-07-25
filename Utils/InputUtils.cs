@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace Algorithms.Utils
 {
-
 	public static class InputUtils
 	{
 		// Method to get integer inputs from the user, including the number of inputs
